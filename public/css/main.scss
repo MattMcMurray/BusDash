@@ -69,12 +69,99 @@ textarea {
   margin-right: 6px;
 }
 
-.arrival-panel {
-  width: 33%;
+// Variables
+// ---------
+$pomegranate_red: #c0392b;
+$pumpkin_orange: #d35400;
+$nephritis_green: #27ae60;
+$cloud_white: #ecf0f1;
+
+// Custom Styles
+// -------------
+.monitor-lockup {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  max-width: 80%;
+  margin: auto;
 }
 
+.arrival-panel {
+  min-width: 440px;
+}
+
+.panel-top-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  height: 220px;
+}
+
+.panel-bottom-row {
+  font-size: 2em;
+  text-align: center;
+}
+
+.panel-route-num {   border-style: solid;   padding: 0 15px; }
+
 .arrival-panel-img {
-  width: 50%;
+  width: 218px;
+  height: 218px;
+  display: inline-block;
+}
+
+.panel-route-num {
+  font-size: 7em;
+  text-align: center;
+}
+
+.critical {
+  background-color: $pomegranate_red;
+  color: $cloud_white;
+
+  .panel-bottom-row {
+    animation-name: bounce;
+    animation-duration: 3000ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+  }
+}
+
+.soon {
+  background-color: $pumpkin_orange;
+  color: $cloud_white;
+}
+
+.low-priority {
+  background-color: $nephritis_green;
+  color: $cloud_white;
+}
+
+// Media Queries
+// -------------
+$small-screen: 600px;
+@media (max-width: $small-screen) {
+  .arrival-panel {
+    width: 100%;
+  }
+}
+
+// Animations
+// ----------
+@keyframes bounce {
+  0% {
+    opacity: 0.9;
+    transform: scale(1.0);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.9;
+    transform: scale(1.0);
+  }
 }
