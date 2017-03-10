@@ -87,15 +87,15 @@ $cloud_white: #ecf0f1;
 }
 
 .arrival-panel {
-  min-width: 440px;
+  max-width: 90vw;
+  padding: 25px;
 }
 
 .panel-top-row {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: space-around;
-  height: 220px;
 }
 
 .panel-bottom-row {
@@ -103,7 +103,11 @@ $cloud_white: #ecf0f1;
   text-align: center;
 }
 
-.panel-route-num {   border-style: solid;   padding: 0 15px; }
+.panel-route-num {   
+  border-style: solid;   
+  padding: 0 15px; 
+  margin: 0 10px;
+}
 
 .arrival-panel-img {
   width: 218px;
@@ -144,7 +148,18 @@ $cloud_white: #ecf0f1;
 $small-screen: 600px;
 @media (max-width: $small-screen) {
   .arrival-panel {
-    width: 100%;
+    width: 100vw;
+  }
+
+  .panel-top-row {
+    flex-direction: column;
+    justify-content: space-between;
+
+    img {
+      margin: 10px;
+      width: 150px;
+      height: 150px;
+    }
   }
 }
 
