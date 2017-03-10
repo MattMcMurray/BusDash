@@ -1,11 +1,15 @@
-var gulp = require('gulp');
-var nodemon = require('gulp-nodemon');
-var sass = require('gulp-sass');
-
+const gulp = require('gulp');
+const nodemon = require('gulp-nodemon');
+const sass = require('gulp-sass');
+const autoprefixer = require('gulp-autoprefixer');
 
 gulp.task('sass', function () {
   return gulp.src('./public/css/*.scss')
     .pipe(sass.sync().on('error', sass.logError))
+    .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+    }))
     .pipe(gulp.dest('./public/css/'));
 });
  
