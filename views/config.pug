@@ -1,4 +1,21 @@
 extends layout
 
 block content
-	h1 Welcome to config page
+	.container
+		form
+			.form-group
+				label(for='input_route') Route #
+				input(type='text' placeholder='XX').form-control#input_route
+				small 2 or 3 digit route number
+			.form-group
+				label(for='input_stop') Stop #
+				input(type='text' placeholder='XXXXX').form-control#input_stop
+				small 5 digit stop number
+			.form-group
+				label(for='input_start') Start time
+				input(type='datetime-local').form-control#input_start
+				small When should we start monitoring?
+			.form-group
+				label(for='input_recurring') Recurring
+					input(type='checkbox').form-control#input_recurring
+
