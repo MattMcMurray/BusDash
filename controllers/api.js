@@ -1,8 +1,7 @@
 'use strict';
 
-const async = require('async');
-const request = require('request');
 const GitHub = require('github');
+const Monitor = require('../models/Monitor');
 
 /**
  * GET /api/github
@@ -34,3 +33,66 @@ exports.postFileUpload = (req, res) => {
   req.flash('success', { msg: 'File was uploaded successfully.' });
   res.redirect('/api/upload');
 };
+
+/**
+ * Transit API stuff goes here
+ *
+ */
+
+
+ /**
+  * Monitor API stuff goes here
+  *
+  */
+
+  /**
+   * @api {post} /monitor/ create new monitor
+   * @apiName CreateMonitor
+   * @apiGroup monitor
+   *
+   * @apiParam {Number} route Route Number you want to monitor
+   * @apiParam {Number} stop Stop Number you want to monitor
+   * @apiParam {Date} start_at The time at which the Monitor should start
+   *
+   */
+exports.postMonitor = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  req.assert('route', 'route must be a number').isNumeric();
+  req.assert('stop', 'Stop must be a number').isNumeric();
+  req.assert('stop', 'Stop must be a 5 digits').len(5);
+
+  const errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/account');
+  }
+
+  const monitor = new Monitor({
+    route: req.body.route,
+    stop: req.body.stop,
+    user: req.user,
+    isRecurring: [true,true,true,true,true,false,false], //hardcoded to be every weekday
+    start_at: "something",
+    duration: 60,
+  })
+
+  Monitor.findOne({route: monitor.route, stop: monitor.stop, user: monitor.user}, (err,something) => {
+    if (err) { return next(err); }
+
+    monitor.save((err) => {
+      if (err) { return next(err); }
+      res.sendStatus(200);
+    });
+  });
+}
+
+exports.getMyMonitors = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  Monitor.find({user: req.user}, (err, results) => {
+    console.dir(results);
+    return results;
+  })
+}
+
+// exports.getAllMonitors =
