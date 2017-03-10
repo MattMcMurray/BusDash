@@ -7,3 +7,9 @@ exports.index = (req, res) => {
     title: 'Home'
   });
 };
+
+exports.config = (req, res) => {
+	res.render('config', {
+		title: 'Config'
+	});
+};
