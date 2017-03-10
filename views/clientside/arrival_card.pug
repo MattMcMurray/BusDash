@@ -1,0 +1,56 @@
+if (priority == 0)
+  .panel.panel-default.arrival-panel.default
+    .panel-body
+      .panel-top-row
+        if (image)
+          img.arrival-panel-img(src=image)
+        else
+          img.arrival-panel-img(src='https://invatar0.appspot.com/svg/mm.jpg?s=200')
+        span.panel-route-num #{ route_num }
+      hr
+      .panel-bottom-row
+        p #{ route_variant }
+        p Stop #{ stop_num }
+        p <strong>Time to leave in #{ minutes_to_arrival }</strong>
+else if (priority == 1)
+  .panel.panel-default.arrival-panel.default.low-priority
+    .panel-body
+      .panel-top-row
+        if (image)
+          img.arrival-panel-img(src=image)
+        else
+          img.arrival-panel-img(src='https://invatar0.appspot.com/svg/mm.jpg?s=200')
+        span.panel-route-num #{ route_num }
+      hr
+      .panel-bottom-row
+        p #{ route_variant }
+        p Stop #{ stop_num }
+        p <strong>Time to leave in #{ minutes_to_arrival }</strong>
+else if (priority == 2)
+  .panel.panel-default.arrival-panel.default.soon
+    .panel-body
+      .panel-top-row
+        if (image)
+          img.arrival-panel-img(src=image)
+        else
+          img.arrival-panel-img(src='https://invatar0.appspot.com/svg/mm.jpg?s=200')
+        span.panel-route-num #{ route_num }
+      hr
+      .panel-bottom-row
+        p #{ route_variant }
+        p Stop #{ stop_num }
+        p <strong>Time to leave in #{ minutes_to_arrival }</strong>
+else if (priority == 3)
+  .panel.panel-default.arrival-panel.default.critical
+    .panel-body
+      .panel-top-row
+        if (image)
+          img.arrival-panel-img(src=image)
+        else
+          img.arrival-panel-img(src='https://invatar0.appspot.com/svg/mm.jpg?s=200')
+        span.panel-route-num #{ route_num }
+      hr
+      .panel-bottom-row
+        p #{ route_variant }
+        p Stop #{ stop_num }
+        p <strong>Time to leave NOW!</strong>
