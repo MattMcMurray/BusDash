@@ -13,8 +13,9 @@
       ul.nav.navbar-nav
         li(class=(title == 'Home') ? 'active' : undefined)
           a(href='/') Dash
-        li
-          a(href='/config') Config
+        if user
+          li
+            a(href='/config') Config
         li
           a(href='/status') Status
       ul.nav.navbar-nav.navbar-right
