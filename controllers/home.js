@@ -9,7 +9,11 @@ exports.index = (req, res) => {
 };
 
 exports.config = (req, res) => {
-	res.render('config', {
-		title: 'Config'
-	});
+	if (!req.user) {
+		return res.redirect('/');
+	} else {
+		res.render('config', {
+			title: 'Config'
+		});
+	}
 };
