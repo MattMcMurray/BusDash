@@ -138,7 +138,9 @@ app.get('/auth/github/callback', passport.authenticate('github', { failureRedire
   res.redirect(req.session.returnTo || '/');
 });
 
-app.post('/api/monitor', apiController.postMonitor);
+app.get('/api/monitors', apiController.getAllMonitors);
+app.get('/api/monitors/me', apiController.getMyMonitors);
+app.post('/api/monitors', apiController.postMonitor);
 /**
  * Error Handler.
  */

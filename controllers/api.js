@@ -46,7 +46,7 @@ exports.postFileUpload = (req, res) => {
   */
 
   /**
-   * @api {post} /monitor/ create new monitor
+   * @api {post} /monitors/ create new monitor
    * @apiName CreateMonitor
    * @apiGroup monitor
    *
@@ -87,12 +87,32 @@ exports.postMonitor = (req, res, next) => {
   });
 }
 
+/**
+ * @api {get} /monitors/me Get all your monitors
+ * @apiName GetMyMonitors
+ * @apiGroup monitor
+ *
+ * @apiSuccess {Object} monitor Your monitors
+ */
 exports.getMyMonitors = (req, res, next) => {
   if (!req.user) return res.sendStatus(403);
   Monitor.find({user: req.user}, (err, results) => {
-    console.dir(results);
-    return results;
+    if (err) { return next(err); }
+    res.json(results);
   })
 }
 
-// exports.getAllMonitors =
+/**
+ * @api {get} /monitors Get ALL monitors
+ * @apiName GetAllMonitors
+ * @apiGroup monitor
+ *
+ * @apiSuccess {Object} monitors All monitors
+ */
+exports.getAllMonitors = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  Monitor.find({}, (err, results) => {
+    if (err) { return next(err); }
+    res.json(results);
+  });
+}
