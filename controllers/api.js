@@ -2,6 +2,7 @@
 
 const GitHub = require('github');
 const Monitor = require('../models/Monitor');
+const moment = require('moment');
 
 /**
  * GET /api/github
@@ -68,12 +69,17 @@ exports.postMonitor = (req, res, next) => {
     return res.redirect('/account');
   }
 
+  const mTime = moment(req.body.start_at);
+  const timestring = mTime.toISOString();
+
+  // NOTE: Day 0 is Sunday, Day 6 is Saturday in isRecurring
+  // This uses the same format as moment
   const monitor = new Monitor({
     route: req.body.route,
     stop: req.body.stop,
     user: req.user,
-    isRecurring: [true,true,true,true,true,false,false], //hardcoded to be every weekday
-    start_at: req.body.start_at,
+    isRecurring: [false,true,true,true,true,true,false], //hardcoded to be every weekday
+    start_at: moment(timestring).format('HH:mm'),
     duration: 60,
   })
 
@@ -127,6 +133,35 @@ exports.getAllMonitorsRaw = (req, res, next) => {
 exports.getAllMonitors = (req, res, next) => {
   if (!req.user) return res.sendStatus(403);
   Monitor.find({})
+  .populate('user', 'profile')
+  .exec((err, results) => {
+   if (err) { return next(err); }
+   res.json(results);
+  });
+}
+/**
+
+ * @api {get} /monitors/active Get ALL active monitors
+ * @apiName GetAllMonitors
+ * @apiGroup monitor
+ *
+ * @apiSuccess {Object} monitors All monitors
+ */
+exports.getAllMonitorsActive = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+
+  // Grab monitors that started up to one hour ago (gives some wiggle room)
+  // And up to one hour away.
+  const hourAgo = moment().subtract(1, 'hour').format('HH:mm');
+  const hourAway = moment().add(1, 'hour').format('HH:mm');
+  const todayIndex = moment().day();
+
+  // Finds all the monitors that should recur today
+  // From up to an hour ago to an hour away
+  Monitor.find()
+  .where('start_at').gt(hourAgo)
+  .where('start_at').lt(hourAway)
+  .where(`isRecurring.${todayIndex}`).equals(true)
   .populate('user', 'profile')
   .exec((err, results) => {
    if (err) { return next(err); }
