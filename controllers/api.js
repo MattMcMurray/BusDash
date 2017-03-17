@@ -3,6 +3,7 @@
 const GitHub = require('github');
 const Monitor = require('../models/Monitor');
 const moment = require('moment');
+const transit = require('../modules/transitWrapper');
 
 /**
  * GET /api/github
@@ -139,6 +140,7 @@ exports.getAllMonitors = (req, res, next) => {
    res.json(results);
   });
 }
+
 /**
 
  * @api {get} /monitors/active Get ALL active monitors
@@ -167,4 +169,23 @@ exports.getAllMonitorsActive = (req, res, next) => {
    if (err) { return next(err); }
    res.json(results);
   });
+}
+
+exports.getStopSchedule = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  if (req.query.route && req.query.stop) {
+    transit.getSimpleStopSchedule(req.query.stop, req.query.route)
+    .then(function(results) {
+      if (results) {
+        res.json(results);
+      } else {
+        console.dir('Problem with Transit API request');
+        console.dir('Most likely a non-existent stop or route #');
+        res.sendStatus(500);
+      }
+    })
+    .catch(function(reason) {
+      res.sendStatus(500);
+    });
+  }
 }
