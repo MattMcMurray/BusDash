@@ -35,6 +35,9 @@ function getSimpleStopSchedule(stopNum, routes) {
       simpleResults.push(tmp);
     }
     return simpleResults;
+  })
+  .catch(function(reason) {
+    return null;
   });
 }
 

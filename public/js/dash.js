@@ -1,36 +1,50 @@
 $(document).ready(function() {
-	var users = [
-		{
-			route_num: 19,
-			route_variant: 'Marion via Autumnwood',
-			stop_num: 'XXXXX',
-			minutes_to_arrival: 3,
-			priority: 3
-		},
-		{
-			route_num: 18,
-			route_variant: 'Maples via Corydon',
-			stop_num: 'XXXXX',
-			minutes_to_arrival: 11,
-			priority: 2
-		},
-		{
-			route_num: 161,
-			route_variant: 'University of Manitoba',
-			stop_num: 'XXXXX',
-			minutes_to_arrival: 22,
-			priority: 1
-		},
-		{
-			image: 'https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_960_720.png',
-			route_num: 161,
-			route_variant: 'University of Manitoba',
-			stop_num: 'XXXXX',
-			minutes_to_arrival: 35,
-			priority: 0
+	var monitorPromise = new Promise( function (resolve, reject) {
+		$.get('/api/monitors')
+		.done(function(data) {
+			resolve(data)
+		})
+		.fail(function(data) {
+			reject(data);
+		});
+	});
+
+	var transitPromises = [];
+	monitorPromise
+	.then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			transitPromises.push(new Promise(function(resolve, reject) {
+				var requestURI = `/api/stopSchedule?stop=${data[i].stop}&route=${data[i].route}`
+				$.get(requestURI)
+				.done(function(transitData) {
+					resolve(transitData);
+				})
+				.fail(function(reason) {
+					reject(reason);
+				});
+			}));
 		}
-	];
-	for (var i = 0; i < 4; i ++) {
-		$('.monitor-lockup').append(template(users[i]));
-	}
+
+		Promise.all(transitPromises).then(function(data) {
+			for (var i = 0; i < data.length; i++) {
+				if (data[i]) {
+					console.dir(data[i])
+					var dataObj = {
+						route_num: data[i][0].route,
+						route_variant: data[i][0].variant,
+						stop_num: data[i][0].stopNumber,
+						minutes_to_arrival: 1, // TODO don't hardcode
+						priority: 3 // TODO don't hardcode
+					}
+
+					$('.monitor-lockup').append(template(dataObj));
+				}
+			}
+		});
+	});
+
+
+	// for (var i = 0; i < 4; i ++) {
+	// 	$('.monitor-lockup').append(template(users[i]));
+	// }
 });

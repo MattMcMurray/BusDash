@@ -181,7 +181,7 @@ exports.getStopSchedule = (req, res, next) => {
       } else {
         console.dir('Problem with Transit API request');
         console.dir('Most likely a non-existent stop or route #');
-        res.sendStatus(500);
+        res.sendStatus(204); // jquery is a bitch and anything not 2XX is rejected/a failure
       }
     })
     .catch(function(reason) {
