@@ -15,10 +15,19 @@ block content
 				label(for='input_start') Start time
 				input(type='datetime-local').form-control#input_start
 				small When should we start monitoring?
-			.form-group
-				label(for='input_recurring') Recurring
-					input(type='checkbox').form-control#input_recurring
+			//- Uncomment when recurring is implemented
+			//- .form-group
+			//- 	label(for='input_recurring') Recurring
+			//- 		input(type='checkbox').form-control#input_recurring
 
 			button(type='submit') Submit
+
+		.alert.alert-success.hidden-alert#success(role='alert')
+			| <strong>Success!</strong> We will keep an eye on that for you ;)
+		.alert.alert-danger.hidden-alert#failure(role='alert')
+			| <strong>Whoops!</strong> Something went wrong :( Please try again.
+		.alert.alert-warning.hidden-alert#warning(role='alert')
+			| <strong>Whoops!</strong> Looks like required fields were left blank.
+block scripts
 block scripts
 	script(src='/js/config.js')
