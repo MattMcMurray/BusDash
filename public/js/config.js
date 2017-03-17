@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         var route = $('#input_route').val();
         var stop = $('#input_stop').val();
-        var start = $('#input_start').val();
+        var start = new Date(); // TODO when inputting date, change this
         var recurring = $('#input_recurring').val();
 
 	    var formData = {
@@ -14,7 +14,7 @@ $(document).ready(function() {
             'isRecurring': recurring
         };
 
-        if (route && stop && start) {
+        if (route && stop) {
             $.post('/api/monitors', formData, function(result) {
                 if (result !== 'OK') {
                     $('#failure').show('slow')
