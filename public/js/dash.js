@@ -26,25 +26,32 @@ $(document).ready(function() {
 		}
 
 		Promise.all(transitPromises).then(function(data) {
+			var dataObjArray = []
 			for (var i = 0; i < data.length; i++) {
 				if (data[i]) {
-					console.dir(data[i])
+					var priority = 0; // Default to lowest priority
+					var arrivalTime = moment(data[i][0].arrival).subtract(5, 'minutes');
+					var now = moment(new Date());
+					var difference = arrivalTime.diff(now, 'minutes');
+					if (difference < 30 && difference >= 15) {
+						priority = 1;
+					} else if (difference < 15 && difference >= 5) {
+						priority = 2;
+					} else if (difference < 5) {
+						priority = 3
+					}
 					var dataObj = {
 						route_num: data[i][0].route,
 						route_variant: data[i][0].variant,
 						stop_num: data[i][0].stopNumber,
-						minutes_to_arrival: 1, // TODO don't hardcode
-						priority: 3 // TODO don't hardcode
+						minutes_to_arrival: moment(data[i][0].arrival).subtract(5, 'minutes').fromNow(), // TODO don't hardcode
+						priority: priority
 					}
-
-					$('.monitor-lockup').append(template(dataObj));
+					dataObjArray.push(dataObj);
 				}
 			}
+
+			$('.monitor-lockup').append(template(dataObj));
 		});
 	});
-
-
-	// for (var i = 0; i < 4; i ++) {
-	// 	$('.monitor-lockup').append(template(users[i]));
-	// }
 });
