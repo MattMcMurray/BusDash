@@ -110,7 +110,7 @@ exports.getMyMonitors = (req, res, next) => {
 
 /**
  * @api {get} /monitors/raw Get ALL monitors with no user info
- * @apiName GetAllMonitors
+ * @apiName GetAllRawMonitors
  * @apiGroup monitor
  *
  * @apiSuccess {Object} monitors All monitors
@@ -142,7 +142,7 @@ exports.getAllMonitors = (req, res, next) => {
 /**
 
  * @api {get} /monitors/active Get ALL active monitors
- * @apiName GetAllMonitors
+ * @apiName GetAllActiveMonitors
  * @apiGroup monitor
  *
  * @apiSuccess {Object} monitors All monitors

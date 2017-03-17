@@ -3,6 +3,7 @@ const nodemon = require('gulp-nodemon');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const pug = require('gulp-pug');
+const apidoc = require('gulp-apidoc');
 
 gulp.task('clientside-views', function buildHTML() {
   return gulp.src('./views/clientside/*.pug')
@@ -10,6 +11,13 @@ gulp.task('clientside-views', function buildHTML() {
   	client: true
   }))
   .pipe(gulp.dest('./public/js/'))
+});
+
+gulp.task('apidoc', function(done){
+          apidoc({
+            src: "controllers/",
+            dest: "public/api"
+          },done);
 });
 
 gulp.task('clientside:watch', function () {
@@ -25,7 +33,7 @@ gulp.task('sass', function () {
     }))
     .pipe(gulp.dest('./public/css/'));
 });
- 
+
 gulp.task('sass:watch', function () {
   gulp.watch('./public/css/*.scss', ['sass']);
 });
