@@ -86,7 +86,7 @@ $cloud_white: #ecf0f1;
 }
 
 .arrival-panel {
-  max-width: 90vw;
+  max-width: 400px;
   padding: 25px;
 }
 
@@ -109,8 +109,8 @@ $cloud_white: #ecf0f1;
 }
 
 .arrival-panel-img {
-  width: 163px;
-  height: 163px;
+  width: 145px;
+  height: 145px;
   display: inline-block;
 }
 
@@ -151,6 +151,12 @@ $cloud_white: #ecf0f1;
 
 .hidden-alert {
   display: none;
+}
+
+.small-font {
+  font-size: 5em;
+  height: 145px;
+  padding-top: 18px;
 }
 
 // Media Queries

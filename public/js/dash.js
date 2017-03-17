@@ -1,4 +1,8 @@
 $(document).ready(function() {
+	if (getParameterByName('hideNav') === 'true') {
+		$('#navlinks').hide();
+		$('.navbar-toggle').hide();
+	}
 	var monitorPromise = new Promise( function (resolve, reject) {
 		$.get('/api/monitors')
 		.done(function(data) {
@@ -63,10 +67,27 @@ $(document).ready(function() {
 				return new Date(a.arrival_time).getTime() - new Date(b.arrival_time).getTime();
 			})
 			for (var i = 0; i < dataObjArray.length; i++) {
+				if (dataObjArray[i].route_num >= 100) {
+					dataObjArray[i].small_font = 'small-font';
+				}
 				$('.monitor-lockup').append(template(dataObjArray[i]));
 			}
 		});
 	});
 
-	window.setTimeout(function() { location.reload(); }, 60000);
+	if (getParameterByName('refresh') === 'true') {
+		window.setTimeout(function() { location.reload(); }, 60000);
+	}
 });
+
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

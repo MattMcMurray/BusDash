@@ -132,7 +132,6 @@ exports.getAllMonitorsRaw = (req, res, next) => {
  * @apiSuccess {Object} monitors All monitors
  */
 exports.getAllMonitors = (req, res, next) => {
-  if (!req.user) return res.sendStatus(403);
   Monitor.find({})
   .populate('user', 'profile')
   .exec((err, results) => {
@@ -172,7 +171,6 @@ exports.getAllMonitorsActive = (req, res, next) => {
 }
 
 exports.getStopSchedule = (req, res, next) => {
-  if (!req.user) return res.sendStatus(403);
   if (req.query.route && req.query.stop) {
     transit.getSimpleStopSchedule(req.query.stop, req.query.route)
     .then(function(results) {
