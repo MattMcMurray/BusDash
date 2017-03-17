@@ -103,7 +103,22 @@ exports.getMyMonitors = (req, res, next) => {
 }
 
 /**
- * @api {get} /monitors Get ALL monitors
+ * @api {get} /monitors/raw Get ALL monitors with no user info
+ * @apiName GetAllMonitors
+ * @apiGroup monitor
+ *
+ * @apiSuccess {Object} monitors All monitors
+ */
+exports.getAllMonitorsRaw = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  Monitor.find({}, (err, results) => {
+    if (err) { return next(err); }
+    res.json(results);
+  });
+}
+
+/**
+ * @api {get} /monitors Get ALL monitors with user info
  * @apiName GetAllMonitors
  * @apiGroup monitor
  *
@@ -111,8 +126,10 @@ exports.getMyMonitors = (req, res, next) => {
  */
 exports.getAllMonitors = (req, res, next) => {
   if (!req.user) return res.sendStatus(403);
-  Monitor.find({}, (err, results) => {
-    if (err) { return next(err); }
-    res.json(results);
+  Monitor.find({})
+  .populate('user', 'profile')
+  .exec((err, results) => {
+   if (err) { return next(err); }
+   res.json(results);
   });
 }
