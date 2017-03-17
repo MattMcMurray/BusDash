@@ -17,14 +17,6 @@ describe('GET /login', () => {
   });
 });
 
-describe('GET /signup', () => {
-  it('should return 200 OK', (done) => {
-    request(app)
-      .get('/signup')
-      .expect(200, done);
-  });
-});
-
 describe('GET /random-url', () => {
   it('should return 404', (done) => {
     request(app)

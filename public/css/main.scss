@@ -81,8 +81,7 @@ $cloud_white: #ecf0f1;
 .monitor-lockup {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
-  max-width: 80%;
+  justify-content: center;
   margin: auto;
 }
 
@@ -130,6 +129,12 @@ $cloud_white: #ecf0f1;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
+  }
+}
+
+.panel-bottom-row {
+  p {
+    max-width: 500px;
   }
 }
 

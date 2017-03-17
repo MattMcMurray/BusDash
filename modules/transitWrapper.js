@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 const unirest = require('unirest');
+const moment = require('moment');
 
 const apiKeyQuery = `api-key=${process.env.WINNIPEG_TRANSIT_KEY}`;
 // stopNum: Number
@@ -19,7 +20,7 @@ function getSimpleStopSchedule(stopNum, routes) {
   var simpleResults = []
   var stopNumber = null;
 
-  return getStopSchedule(stopNum, routes)
+  return getStopSchedule(stopNum, routes, 5)
   .then(function(res) {
     stopNumber = res.body['stop-schedule'].stop.number;
     var stopList = res.body['stop-schedule']['route-schedules'];
@@ -43,12 +44,14 @@ function getSimpleStopSchedule(stopNum, routes) {
 
 function getStopSchedule(stopNum, routes, maxPerRoute) {
   var scheduleURI = getStopScheduleURI(stopNum, routes);
+  var now = moment().add(5, 'minutes').toISOString();
 
   return new Promise(function(resolve, reject) {
     unirest
     .get(scheduleURI)
     .query(apiKeyQuery)
     .query(`max-results-per-route=${maxPerRoute || 1}`)
+    .query(`start=${now}`)
     .end(function (response) {
       if (response.error){
         return reject(response);
