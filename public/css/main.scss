@@ -143,6 +143,10 @@ $cloud_white: #ecf0f1;
   color: $cloud_white;
 }
 
+.hidden-alert {
+  display: none;
+}
+
 // Media Queries
 // -------------
 $small-screen: 600px;

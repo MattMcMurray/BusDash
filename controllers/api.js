@@ -73,7 +73,7 @@ exports.postMonitor = (req, res, next) => {
     stop: req.body.stop,
     user: req.user,
     isRecurring: [true,true,true,true,true,false,false], //hardcoded to be every weekday
-    start_at: "something",
+    start_at: req.body.start_at,
     duration: 60,
   })
 
