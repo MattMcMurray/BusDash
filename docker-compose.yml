@@ -1,0 +1,13 @@
+version: '2'
+
+# This file builds and sets up two services
+# the Node web server that connects to port 3000 and uses the default
+# Dockerfile to build the container
+# Then it also launches mongo
+services:
+  web:
+    build: .
+    ports:
+     - "3000:3000"
+  mongohost:
+    image: "mongo"
