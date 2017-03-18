@@ -4,6 +4,7 @@ const sinon = require('sinon');
 require('sinon-mongoose');
 
 const User = require('../models/User');
+const Monitor = require('../models/Monitor');
 
 describe('User Model', () => {
   it('should create a new user', (done) => {
@@ -102,5 +103,57 @@ describe('User Model', () => {
       expect(result.nRemoved).to.equal(1);
       done();
     })
+  });
+});
+
+describe('Monitor Model', function() {
+  it('should create a new monitor', function(done) {
+    const user = new User();
+    const MonitorMock = sinon.mock(new Monitor({
+        route: 75, 
+        stop: 50070,
+        user: user,
+        isRecurring: [true, true, true, true, true, true, true],
+        start_at: new Date().toString(),
+        duration: 600000
+      }));
+    const monitor = MonitorMock.object;
+
+    MonitorMock
+      .expects('save')
+      .yields(null);
+
+    monitor.save(function(err, result) {
+      MonitorMock.verify();
+      MonitorMock.restore();
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('should return error if monitor not created', function(done) {
+    const user = new User();
+    const MonitorMock = sinon.mock(new Monitor({
+        route: 75, 
+        stop: 50070,
+        user: user,
+        isRecurring: [true, true, true, true, true, true, true],
+        start_at: new Date().toString(),
+        duration: 600000
+      }));
+    const monitor = MonitorMock.object;
+    const expectedError = { name: 'ValidationError' }
+
+    MonitorMock
+      .expects('save')
+      .yields(expectedError);
+
+      monitor.save((err, result) => {
+        MonitorMock.verify();
+        MonitorMock.restore();
+        expect(err.name).to.equal('ValidationError');
+        expect(result).to.be.undefined;
+        done();
+      });
   });
 });

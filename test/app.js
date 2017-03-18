@@ -24,3 +24,19 @@ describe('GET /random-url', () => {
       .expect(404, done);
   });
 });
+
+describe('GET /config', function() {
+  it('should redirect 302', function(done) {
+    request(app)
+      .get('/config')
+      .expect(302, done);
+  });
+});
+
+describe('GET /status', function() {
+  it('should return 200', function(done) {
+    request(app)
+      .get('/status')
+      .expect(200, done);
+  });
+});
