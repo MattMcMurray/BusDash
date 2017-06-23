@@ -9,16 +9,13 @@ html
     title Dash4Bus
     link(rel='shortcut icon', href='/favicon.png')
     link(rel='stylesheet', href='/css/main.css')
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.2/css/bulma.min.css")
+    link(href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700" rel="stylesheet")
 
   body
-    include partials/header
-
-    include partials/flash
     block content
 
-    include partials/footer
-
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
-    script(src='/js/lib/bootstrap.min.js')
-    script(src='/js/moment.js')
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js")
     block scripts

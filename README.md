@@ -1,3 +1,18 @@
-# Dash 4 Bus [![Build Status](https://travis-ci.org/MattMcMurray/Dash4Bus.svg?branch=develop)](https://travis-ci.org/MattMcMurray/Dash4Bus)
+# dash4bus-frontend
 
-Dash4Bus is a dashboard for all your Winnipeg Transit needs!
+> New SPA frontend for Dash4Bus
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+```
+
+For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
