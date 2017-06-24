@@ -123,6 +123,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }))
 app.get('/', homeController.index);
 app.get('/config', homeController.config);
 app.get('/login', userController.getLogin);
+app.get('/isLoggedIn', userController.isLoggedIn);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
 app.get('/forgot', userController.getForgot);

@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <nav-bar></nav-bar>
+    <nav-bar :loggedIn="loggedIn"
+             :profileImgSrc="me.picture"></nav-bar>
 
     <section class="monitor-lockup">
       <div class="container">
@@ -25,6 +26,8 @@ export default {
   components: {NavBar, BusMonitor},
   data () {
     return {
+      loggedIn: false,
+      me: {},
       monitors: [],
       arrivals: [
 
@@ -56,10 +59,32 @@ export default {
           console.error(err);
           return null
         });
+    },
+
+    isLoggedIn: () => {
+      return axios.get('/isLoggedIn')
     }
   },
   mounted() {
     // App is ready, start processing
+
+    this.isLoggedIn()
+      .then(result => {
+        if (result.data.logged_in) {
+          localStorage.setItem("logged_in", true)
+          this.loggedIn = true;
+          this.me = result.data.user;
+        } else {
+          localStorage.setItem("logged_in", false)
+          this.loggedIn = false;
+        }
+      })
+      .catch(err => {
+        this.loggedIn = false;
+        localStorage.setItem("logged_in", false)
+        console.error(err);
+      });
+
     this.getMonitors()
     .then(data => {
       data.data.forEach(monitor => {
@@ -95,7 +120,6 @@ export default {
       // Once all requests have been fulfilled, update app data
       Promise.all(transitPromises).then(data => {
         data.forEach(arrival => {
-          console.log(arrival.data);
           this.arrivals.push({
             user: arrival.user,
             route: arrival.data[0].route,

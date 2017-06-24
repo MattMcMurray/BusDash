@@ -17,6 +17,19 @@ exports.getLogin = (req, res) => {
   });
 };
 
+/** Not the prettiest way to do this,
+ *  but the project was setup without taking Vue.js
+ *  in mind, so we need some way to set a browser side
+ *  localStorage item indicating user is signed in
+ */
+exports.isLoggedIn = (req, res) => {
+  if (req.user) {
+    return res.status(200).send({logged_in: true, user: req.user.profile});
+  } else {
+    return res.status(200).send({logged_in: false});
+  }
+}
+
 /**
  * POST /login
  * Sign in using email and password.

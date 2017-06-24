@@ -25,15 +25,22 @@
         <!-- Add the modifier "is-active" to display it on mobile -->
         <div class="nav-right nav-menu">
             <a class="nav-item" href="/"> Home </a>
+            <a class="nav-item" href="/config" v-show="loggedIn"> Add Monitor </a>
 
             <div class="nav-item">
                 <div class="field is-grouped">
                    <p class="control">
-                        <a class="button is-primary" href="/login">
+                        <!-- The log in button for non-logged in users -->
+                        <a class="button is-primary" href="/login" v-show="!loggedIn">
                             <span class="icon">
                                 <i class="fa fa-sign-in"></i>
                             </span>
                             <span>Log in</span>
+                        </a>
+
+                        <!-- The user profile button for logged in users -->
+                        <a href="#" v-show="loggedIn" class="nav-item">
+                                <img :src="profileImgSrc">
                         </a>
                     </p>
                 </div>
@@ -45,6 +52,7 @@
 <script>
     export default {
         name: 'NavBar',
+        props: ['loggedIn', 'profileImgSrc'],
         data() {
             return {
             }

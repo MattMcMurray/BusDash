@@ -29,5 +29,6 @@ block content
 		.alert.alert-warning.hidden-alert#warning(role='alert')
 			| <strong>Whoops!</strong> Looks like required fields were left blank.
 block scripts
-block scripts
+	//- TODO remove jquery once all get/post requests moved to axios
+	script(src="https://code.jquery.com/jquery-3.2.1.min.js")
 	script(src='/js/config.js')
