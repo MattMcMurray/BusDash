@@ -11,6 +11,7 @@
     <section v-if="pages.home" class="monitor-lockup" >
       <div class="container">
         <div class="column">
+          <small class="refreshed-at"> Refreshed {{ lastRefresh }} </small>
           <bus-monitor v-for="monitor in getSortedArrivals" 
                        :key="monitor.arrival" 
                        :username="monitor.user" 
@@ -46,6 +47,7 @@ export default {
   components: {NavBar, BusMonitor, Login, Config},
   data () {
     return {
+      now: null,
       loggedIn: false,
       me: {},
       monitors: [],
@@ -70,9 +72,16 @@ export default {
           return 1
         return 0;
       } 
-
       return this.arrivals.sort(compare);
     },
+
+    lastRefresh: function() {
+      if (this.now) {
+        return this.now.fromNow();
+      } else {
+        return ""
+      }
+    }
   },
 
   methods: {
@@ -108,6 +117,63 @@ export default {
     goHome() {
       this.setAllPagesFalse();
       this.pages.home = true;
+      this.refreshMonitors(); 
+    },
+
+    refreshMonitors: function() {
+      this.getMonitors()
+      .then(data => {
+        this.monitors = [];
+        data.data.forEach(monitor => {
+          this.monitors.push({
+            user: monitor.user[0].profile.name,
+            route: monitor.route,
+            stop: monitor.stop
+          })
+        });
+
+        return;
+      })
+      .then(() => {
+        var transitPromises = [];
+
+        // Set up a list of promises to get active monitors
+        this.monitors.forEach(monitor => {
+          var requestURI = 'http://localhost:3000/api/stopSchedule?stop=' + monitor.stop + '&route=' + monitor.route; // TODO after testing, change to relative path
+          let user = monitor.user;
+
+          transitPromises.push(
+            axios.get(requestURI)
+              .then(response => {
+                response.user = user;
+                return response;
+              })
+              .catch(err => {
+                return null;
+              })
+          );
+        });
+
+        // Once all requests have been fulfilled, update app data
+        Promise.all(transitPromises).then(data => {
+          this.arrivals = [];
+          this.now = moment();
+          data.forEach(arrival => {
+            if (arrival.data.length > 0) {
+              this.arrivals.push({
+                user: arrival.user,
+                route: arrival.data[0].route,
+                arrival: moment(arrival.data[0].arrival),
+                variant: arrival.data[0].variant,
+                stop: arrival.data[0].stopNumber,
+              });
+            }
+          });
+        });
+      })
+      .catch(err => {
+        console.error(err);
+      });
     }
   },
 
@@ -130,56 +196,11 @@ export default {
         console.error(err);
       });
 
-    this.getMonitors()
-    .then(data => {
-      data.data.forEach(monitor => {
-        this.monitors.push({
-          user: monitor.user[0].profile.name,
-          route: monitor.route,
-          stop: monitor.stop
-        })
-      });
-
-      return;
-    })
-    .then(() => {
-      var transitPromises = [];
-
-      // Set up a list of promises to get active monitors
-      this.monitors.forEach(monitor => {
-        var requestURI = 'http://localhost:3000/api/stopSchedule?stop=' + monitor.stop + '&route=' + monitor.route; // TODO after testing, change to relative path
-        let user = monitor.user;
-
-        transitPromises.push(
-          axios.get(requestURI)
-            .then(response => {
-              response.user = user;
-              return response;
-            })
-            .catch(err => {
-              return null;
-            })
-        );
-      });
-
-      // Once all requests have been fulfilled, update app data
-      Promise.all(transitPromises).then(data => {
-        data.forEach(arrival => {
-          if (arrival.data.length > 0) {
-            this.arrivals.push({
-              user: arrival.user,
-              route: arrival.data[0].route,
-              arrival: moment(arrival.data[0].arrival),
-              variant: arrival.data[0].variant,
-              stop: arrival.data[0].stopNumber,
-            });
-          }
-        });
-      });
-    })
-    .catch(err => {
-      console.error(err);
-    });
+      this.refreshMonitors();
+      var _this = this;
+      window.setInterval(function(){
+        _this.refreshMonitors();
+      }, 30000);
   }
 }
 </script>
@@ -216,10 +237,15 @@ body {
 
 .login-lockup {
   height: 100%;
+  padding-top: 5em;
 }
 
 .config-lockup {
   padding-top: 5em;
   height: 100%;
+}
+
+.refreshed-at {
+  color: white;
 }
 </style>
