@@ -10,8 +10,9 @@
       <div class="content">
         <p>
           <strong>{{ username }} </strong>
+          <small>{{ variant }}</small>
           <br>
-          Your bus arrives at <strong> {{ formattedTime }}</strong>, <strong>{{ minutesToArrival }}</strong>.
+          Your bus arrives at stop {{ stop }} at <strong> {{ formattedTime }}</strong>, <strong>{{ minutesToArrival }}</strong>.
         </p>
       </div>
     </div>
@@ -22,10 +23,9 @@
 <script>
 export default {
     name: 'BusMonitor',
-    props: ['username', 'route', 'arrival'],
+    props: ['username', 'route', 'arrival', 'stop', 'variant', 'profileImg'],
     data() {
         return {
-            image_src: 'http://via.placeholder.com/500x500',
             arrival_time: this.arrival,
         }
     },
@@ -52,11 +52,16 @@ export default {
 
 .box {
   width: 66vw;
+  align-items: center;
+}
+
+.image {
+  display: flex;
+  align-items: center;
 }
 
 .media-content {
   padding-left: 1em;
 }
-
 
 </style>

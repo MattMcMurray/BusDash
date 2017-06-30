@@ -25,13 +25,13 @@
         <!-- Add the modifier "is-active" to display it on mobile -->
         <div class="nav-right nav-menu">
             <a class="nav-item" href="/"> Home </a>
-            <a class="nav-item" href="/config" v-show="loggedIn"> Add Monitor </a>
+            <a class="nav-item" href="/#/monitors" v-show="loggedIn"> Edit Monitors </a>
 
             <div class="nav-item">
                 <div class="field is-grouped">
                    <p class="control">
                         <!-- The log in button for non-logged in users -->
-                        <a class="button is-primary" href="/login" v-show="!loggedIn">
+                        <a class="button is-primary" href="/#/login" v-show="!loggedIn" @click="emitGoToLogin">
                             <span class="icon">
                                 <i class="fa fa-sign-in"></i>
                             </span>
@@ -55,6 +55,12 @@
         props: ['loggedIn', 'profileImgSrc'],
         data() {
             return {
+            }
+        },
+
+        methods: {
+            emitGoToLogin: function() {
+                this.$emit('goToLogin');
             }
         }
     }

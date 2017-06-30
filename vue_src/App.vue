@@ -1,18 +1,27 @@
 <template>
   <div id="app">
     <nav-bar :loggedIn="loggedIn"
-             :profileImgSrc="me.picture"></nav-bar>
+             :profileImgSrc="me.picture"
+             @goToLogin="goToLogin"></nav-bar>
 
-    <section class="monitor-lockup">
+     <!--HOME PAGE-->
+    <section v-if="pages.home" class="monitor-lockup" >
       <div class="container">
         <div class="column">
           <bus-monitor v-for="monitor in getSortedArrivals" 
                        :key="monitor.arrival" 
                        :username="monitor.user" 
                        :route="monitor.route" 
-                       :arrival="monitor.arrival"></bus-monitor>
+                       :arrival="monitor.arrival"
+                       :stop="monitor.stop"
+                       :variant="monitor.variant"></bus-monitor>
         </div>
       </div>
+    </section>
+
+    <!--LOGIN PAGE-->
+    <section v-if="pages.login" class="login-lockup">
+      <login></login>
     </section>
   </div>
 </template>
@@ -20,10 +29,11 @@
 <script>
 import NavBar from './DashNav.vue'
 import BusMonitor from './BusMonitor.vue'
+import Login from './Login.vue'
 
 export default {
   name: 'app',
-  components: {NavBar, BusMonitor},
+  components: {NavBar, BusMonitor, Login},
   data () {
     return {
       loggedIn: false,
@@ -31,7 +41,13 @@ export default {
       monitors: [],
       arrivals: [
 
-      ]
+      ],
+      displayModal: false,
+      pages: {
+        home: true,
+        login: false,
+        monitors: false
+      }
     }
   },
 
@@ -46,11 +62,11 @@ export default {
       } 
 
       return this.arrivals.sort(compare);
-    }
+    },
   },
 
   methods: {
-    getMonitors: () => {
+    getMonitors: function() {
       return axios.get('http://127.0.0.1:3000/api/monitors') //TODO after testing, change to relative path
         .then(response => {
           return response
@@ -61,12 +77,32 @@ export default {
         });
     },
 
-    isLoggedIn: () => {
+    isLoggedIn: function() {
       return axios.get('/isLoggedIn')
+    },
+
+    setAllPagesFalse() {
+      Object.keys(this.pages).forEach(v => this.pages[v] = false)
+    },
+
+    goToLogin() {
+      this.setAllPagesFalse();
+      this.pages.login = true;
+    },
+
+    goToMonitorConfig() {
+      this.setAllPagesFalse();
+      this.pages.monitors = true;
     }
   },
+
   mounted() {
     // App is ready, start processing
+    if (window.location.href.indexOf('login') > 0) {
+      this.goToLogin();
+    } else if (window.logcation.href.indexOf('monitors') > 0) {
+      this.goToMonitorConfig();
+    }
 
     this.isLoggedIn()
       .then(result => {
@@ -120,12 +156,15 @@ export default {
       // Once all requests have been fulfilled, update app data
       Promise.all(transitPromises).then(data => {
         data.forEach(arrival => {
-          this.arrivals.push({
-            user: arrival.user,
-            route: arrival.data[0].route,
-            arrival: moment(arrival.data[0].arrival),
-            variant: arrival.data[0].variant
-          });
+          if (arrival.data.length > 0) {
+            this.arrivals.push({
+              user: arrival.user,
+              route: arrival.data[0].route,
+              arrival: moment(arrival.data[0].arrival),
+              variant: arrival.data[0].variant,
+              stop: arrival.data[0].stopNumber,
+            });
+          }
         });
       });
     })
@@ -146,6 +185,10 @@ body {
   min-height: 100vh;
 }
 
+#app {
+  height: 100vh;
+}
+
 .monitor-lockup {
   padding-top: 1em;
 }
@@ -156,4 +199,9 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.login-lockup {
+  height: 100%;
+}
+
 </style>
