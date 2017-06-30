@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <nav-bar :loggedIn="loggedIn"
+    <nav-bar class="navbar"
+             :loggedIn="loggedIn"
              :profileImgSrc="me.picture"
-             @goToLogin="goToLogin"></nav-bar>
+             @goToLogin="goToLogin"
+             @goToConfig="goToMonitorConfig"
+             @goHome="goHome"></nav-bar>
 
-     <!--HOME PAGE-->
+     <!--HOME SECTION-->
     <section v-if="pages.home" class="monitor-lockup" >
       <div class="container">
         <div class="column">
@@ -19,10 +22,16 @@
       </div>
     </section>
 
-    <!--LOGIN PAGE-->
+    <!--LOGIN SECTION-->
     <section v-if="pages.login" class="login-lockup">
       <login></login>
     </section>
+
+    <section v-if="pages.monitors" class="config-lockup">
+      <config></config>
+    </section>
+
+
   </div>
 </template>
 
@@ -30,10 +39,11 @@
 import NavBar from './DashNav.vue'
 import BusMonitor from './BusMonitor.vue'
 import Login from './Login.vue'
+import Config from './ConfigMonitors.vue'
 
 export default {
   name: 'app',
-  components: {NavBar, BusMonitor, Login},
+  components: {NavBar, BusMonitor, Login, Config},
   data () {
     return {
       loggedIn: false,
@@ -93,16 +103,15 @@ export default {
     goToMonitorConfig() {
       this.setAllPagesFalse();
       this.pages.monitors = true;
+    },
+    
+    goHome() {
+      this.setAllPagesFalse();
+      this.pages.home = true;
     }
   },
 
   mounted() {
-    // App is ready, start processing
-    if (window.location.href.indexOf('login') > 0) {
-      this.goToLogin();
-    } else if (window.logcation.href.indexOf('monitors') > 0) {
-      this.goToMonitorConfig();
-    }
 
     this.isLoggedIn()
       .then(result => {
@@ -181,16 +190,21 @@ body {
   background: #2c3e50;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to top, #2c3e50, #0575E6);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to top, #2c3e50, #0575E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background-attachment: scroll;
+  background-attachment: fixed;
   min-height: 100vh;
 }
 
 #app {
-  height: 100vh;
+  height: 100%;
+}
+
+.navbar {
+  position: fixed;
+  width: 100vw;
 }
 
 .monitor-lockup {
-  padding-top: 1em;
+  padding-top: 5em;
 }
 
 .column {
@@ -204,4 +218,8 @@ body {
   height: 100%;
 }
 
+.config-lockup {
+  padding-top: 5em;
+  height: 100%;
+}
 </style>

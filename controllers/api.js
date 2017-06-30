@@ -4,6 +4,8 @@ const GitHub = require('github');
 const Monitor = require('../models/Monitor');
 const moment = require('moment');
 const transit = require('../modules/transitWrapper');
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 /**
  * GET /api/github
@@ -107,6 +109,21 @@ exports.getMyMonitors = (req, res, next) => {
     if (err) { return next(err); }
     res.json(results);
   })
+}
+
+exports.deleteMonitor = (req, res, next) => {
+  if (!req.user) return res.sendStatus(403);
+  console.log(req.body);
+  Monitor.findOneAndRemove({_id: req.body.monitor.id, user: req.body.user.id}, (err, results) => {
+    console.log(results);
+    if (err) {
+      res.sendStatus(500);
+    } else if (results) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(304);
+    }
+  });
 }
 
 /**

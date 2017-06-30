@@ -139,6 +139,7 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 app.get('/api/monitors', apiController.getAllMonitors);
+app.post('/api/monitors/delete', apiController.deleteMonitor);
 app.get('/api/monitors/active', apiController.getAllMonitorsActive);
 app.get('/api/monitors/raw', apiController.getAllMonitorsRaw);
 app.get('/api/monitors/me', apiController.getMyMonitors);

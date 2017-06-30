@@ -24,8 +24,8 @@
         <!-- This "nav-menu" is hidden on mobile -->
         <!-- Add the modifier "is-active" to display it on mobile -->
         <div class="nav-right nav-menu">
-            <a class="nav-item" href="/"> Home </a>
-            <a class="nav-item" href="/#/monitors" v-show="loggedIn"> Edit Monitors </a>
+            <a class="nav-item" href="#" @click="emitGoHome"> Home </a>
+            <a class="nav-item" href="/#/monitors" v-show="loggedIn" @click="emitGoToConfig"> Edit Monitors </a>
 
             <div class="nav-item">
                 <div class="field is-grouped">
@@ -39,9 +39,11 @@
                         </a>
 
                         <!-- The user profile button for logged in users -->
-                        <a href="#" v-show="loggedIn" class="nav-item">
-                                <img :src="profileImgSrc">
-                        </a>
+                        <span class="hint--left" aria-label="Log out">
+                            <a href="/logout" v-show="loggedIn" class="nav-item">
+                                    <img :src="profileImgSrc">
+                            </a>
+                        </span>
                     </p>
                 </div>
             </div>
@@ -61,6 +63,12 @@
         methods: {
             emitGoToLogin: function() {
                 this.$emit('goToLogin');
+            },
+            emitGoToConfig: function() {
+                this.$emit('goToConfig');
+            },
+            emitGoHome: function() {
+                this.$emit('goHome');
             }
         }
     }
