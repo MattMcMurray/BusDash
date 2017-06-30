@@ -91,7 +91,7 @@ exports.postMonitor = (req, res, next) => {
 
     monitor.save((err) => {
       if (err) { return next(err); }
-      res.sendStatus(200);
+      res.status(200).send(monitor);
     });
   });
 }
