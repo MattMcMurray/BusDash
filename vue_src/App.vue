@@ -145,7 +145,7 @@ export default {
 
         // Set up a list of promises to get active monitors
         this.monitors.forEach(monitor => {
-          var requestURI = 'http://localhost:3000/api/stopSchedule?stop=' + monitor.stop + '&route=' + monitor.route; // TODO after testing, change to relative path
+          var requestURI = '/api/stopSchedule?stop=' + monitor.stop + '&route=' + monitor.route; // TODO after testing, change to relative path
           let user = monitor.user;
 
           transitPromises.push(
@@ -214,11 +214,33 @@ export default {
 <style lang="scss">
 
 body {
-  background: #2c3e50;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #2c3e50, #0575E6);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #2c3e50, #0575E6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background-attachment: fixed;
+  background: #7474BF;  /* fallback for old browsers */
+  /*background: -webkit-linear-gradient(to bottom, #348AC7, #7474BF);
+  background: linear-gradient(to bottom, #348AC7, #7474BF);
+  background-attachment: fixed;*/
   min-height: 100vh;
+  background: linear-gradient(0deg, #7474bf, #348ac7);
+  background-size: 200% 200%;
+
+  -webkit-animation: AnimationName 10s ease infinite;
+  -moz-animation: AnimationName 10s ease infinite;
+  animation: AnimationName 10s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:45% 0%}
+    50%{background-position:56% 100%}
+    100%{background-position:45% 0%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:45% 0%}
+    50%{background-position:56% 100%}
+    100%{background-position:45% 0%}
+}
+@keyframes AnimationName { 
+    0%{background-position:45% 0%}
+    50%{background-position:56% 100%}
+    100%{background-position:45% 0%}
 }
 
 #app {
@@ -253,6 +275,7 @@ body {
 
 .refreshed-at {
   color: white;
+  margin-bottom: 1em;
 }
 
 .subtle {

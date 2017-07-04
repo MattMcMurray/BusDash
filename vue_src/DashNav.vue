@@ -85,6 +85,6 @@
 }
 
 .nav {
-    background-color: #ecf0f1;
+    background-color: white;
 }
 </style>
