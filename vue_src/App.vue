@@ -92,7 +92,7 @@ export default {
 
   methods: {
     getMonitors: function() {
-      return axios.get('http://127.0.0.1:3000/api/monitors') //TODO after testing, change to relative path
+      return axios.get('/api/monitors') //TODO after testing, change to relative path
         .then(response => {
           return response
         })
@@ -222,22 +222,22 @@ body {
   background: linear-gradient(0deg, #7474bf, #348ac7);
   background-size: 200% 200%;
 
-  -webkit-animation: AnimationName 10s ease infinite;
-  -moz-animation: AnimationName 10s ease infinite;
-  animation: AnimationName 10s ease infinite;
+  -webkit-animation: AnimateBackground 10s ease infinite;
+  -moz-animation: AnimateBackground 10s ease infinite;
+  animation: AnimateBackground 10s ease infinite;
 }
 
-@-webkit-keyframes AnimationName {
+@-webkit-keyframes AnimateBackground {
     0%{background-position:45% 0%}
     50%{background-position:56% 100%}
     100%{background-position:45% 0%}
 }
-@-moz-keyframes AnimationName {
+@-moz-keyframes AnimateBackground {
     0%{background-position:45% 0%}
     50%{background-position:56% 100%}
     100%{background-position:45% 0%}
 }
-@keyframes AnimationName { 
+@keyframes AnimateBackground { 
     0%{background-position:45% 0%}
     50%{background-position:56% 100%}
     100%{background-position:45% 0%}
