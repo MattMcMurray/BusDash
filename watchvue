@@ -1,5 +1,8 @@
 #!/bin/sh
+
+# run this script to watch for changes to .vue files and rebuild when necessary
+
 while inotifywait -e modify vue_src/*; do
-	npm run vue-build
+	npm run vue-build-dev
 	notify-send "Vue build finished!"
 done

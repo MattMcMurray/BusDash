@@ -8,30 +8,33 @@
              @goHome="goHome"></nav-bar>
 
      <!--HOME SECTION-->
-    <section v-if="pages.home" class="monitor-lockup" >
-      <div class="container">
-        <div class="column">
-          <small class="refreshed-at"> Refreshed {{ lastRefresh }} <span class="subtle">({{ formattedNow }})</span></small>
-          <bus-monitor v-for="monitor in getSortedArrivals" 
-                       :key="monitor.arrival" 
-                       :username="monitor.user" 
-                       :route="monitor.route" 
-                       :arrival="monitor.arrival"
-                       :stop="monitor.stop"
-                       :variant="monitor.variant"></bus-monitor>
+    <empty-monitor-warning v-if="monitors.length === 0 && pages.home"
+                           :displayHero="!loggedIn"></empty-monitor-warning>
+    <div class="content-lockup">
+      <section v-if="pages.home" class="monitor-lockup" >
+        <div class="container">
+          <div class="column">
+            <small class="refreshed-at" v-if="loggedIn"> Refreshed {{ lastRefresh }} <span class="subtle">({{ formattedNow }})</span></small>
+            <bus-monitor v-for="monitor in getSortedArrivals" 
+                        :key="monitor.arrival" 
+                        :username="monitor.user" 
+                        :route="monitor.route" 
+                        :arrival="monitor.arrival"
+                        :stop="monitor.stop"
+                        :variant="monitor.variant"></bus-monitor>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!--LOGIN SECTION-->
-    <section v-if="pages.login" class="login-lockup">
-      <login></login>
-    </section>
+      <!--LOGIN SECTION-->
+      <section v-if="pages.login" class="login-lockup">
+        <login></login>
+      </section>
 
-    <section v-if="pages.monitors" class="config-lockup">
-      <config></config>
-    </section>
-
+      <section v-if="pages.monitors" class="config-lockup">
+        <config></config>
+      </section>
+    </div>
 
   </div>
 </template>
@@ -41,10 +44,11 @@ import NavBar from './DashNav.vue'
 import BusMonitor from './BusMonitor.vue'
 import Login from './Login.vue'
 import Config from './ConfigMonitors.vue'
+import EmptyMonitorWarning from './EmptyMonitors.vue'
 
 export default {
   name: 'app',
-  components: {NavBar, BusMonitor, Login, Config},
+  components: {NavBar, BusMonitor, Login, Config, EmptyMonitorWarning},
   data () {
     return {
       now: null,
@@ -92,7 +96,7 @@ export default {
 
   methods: {
     getMonitors: function() {
-      return axios.get('/api/monitors') //TODO after testing, change to relative path
+      return axios.get('/api/monitors', {withCredentials: true})
         .then(response => {
           return response
         })
@@ -252,7 +256,7 @@ body {
   width: 100vw;
 }
 
-.monitor-lockup {
+.content-lockup {
   padding-top: 5em;
 }
 

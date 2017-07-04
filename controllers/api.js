@@ -149,12 +149,21 @@ exports.getAllMonitorsRaw = (req, res, next) => {
  * @apiSuccess {Object} monitors All monitors
  */
 exports.getAllMonitors = (req, res, next) => {
-  Monitor.find({})
-  .populate('user', 'profile')
-  .exec((err, results) => {
-   if (err) { return next(err); }
-   res.json(results);
-  });
+  if (process.env.ORG_MODE === "true") {
+    Monitor.find({})
+    .populate('user', 'profile')
+    .exec((err, results) => {
+    if (err) { return next(err); }
+    res.json(results);
+    });
+  } else {
+    Monitor.find({user: req.user})
+    .populate('user', 'profile')
+    .exec((err, results) => {
+      if (err) { return next(err); }
+      res.json(results);
+    });
+  }
 }
 
 /**
