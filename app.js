@@ -145,6 +145,7 @@ app.get('/api/monitors/raw', apiController.getAllMonitorsRaw);
 app.get('/api/monitors/me', apiController.getMyMonitors);
 app.post('/api/monitors', apiController.postMonitor);
 app.get('/api/stopSchedule', apiController.getStopSchedule);
+app.get('/api/stopInfo', apiController.getBusStopInfo);
 
 app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
 

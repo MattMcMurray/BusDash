@@ -2,7 +2,9 @@ const dotenv = require('dotenv');
 const unirest = require('unirest');
 const moment = require('moment');
 
-const apiKeyQuery = `api-key=${process.env.WINNIPEG_TRANSIT_KEY}`;
+const API_KEY_Q = `api-key=${process.env.WINNIPEG_TRANSIT_KEY}`;
+const BASE_URI = "https://api.winnipegtransit.com/v2"
+
 // stopNum: Number
 // routes: Number or Array
 function getStopScheduleURI(stopNum, routes) {
@@ -12,7 +14,7 @@ function getStopScheduleURI(stopNum, routes) {
     routeList = routes.toString();
   }
 
-  return `https://api.winnipegtransit.com/v2/stops/${stopNum}/schedule.json?route=${routeList}`
+  return `${BASE_URI}/stops/${stopNum}/schedule.json?route=${routeList}`
 }
 
 // Returns a nicely formatted array with only the info we need
@@ -44,12 +46,12 @@ function getSimpleStopSchedule(stopNum, routes) {
 
 function getStopSchedule(stopNum, routes, maxPerRoute) {
   var scheduleURI = getStopScheduleURI(stopNum, routes);
-  var now = moment().add(5, 'minutes').toISOString();
+  var now = moment().add(2, 'minutes').toISOString();
 
   return new Promise(function(resolve, reject) {
     unirest
     .get(scheduleURI)
-    .query(apiKeyQuery)
+    .query(API_KEY_Q)
     .query(`max-results-per-route=${maxPerRoute || 1}`)
     .query(`start=${now}`)
     .end(function (response) {
@@ -61,7 +63,24 @@ function getStopSchedule(stopNum, routes, maxPerRoute) {
   })
 }
 
+function getStopInfo(stopNum) {
+  var requestURI = `${BASE_URI}/stops/${stopNum}.json?usage=long&${API_KEY_Q}`
+  return new Promise((resolve, reject) => {
+    unirest
+      .get(requestURI)
+      .query('usage', 'long')
+      .query(API_KEY_Q)
+      .end(response => {
+        if (response.error){
+          return reject(response);
+        }
+        return resolve(response);
+      })
+  });
+}
+
 module.exports = {
   getStopSchedule,
-  getSimpleStopSchedule
+  getSimpleStopSchedule,
+  getStopInfo
 }

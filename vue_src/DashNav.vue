@@ -1,7 +1,7 @@
 <template>
     <nav class="nav">
         <div class="nav-left">
-            <a class="nav-item">
+            <a class="nav-item" href="/">
                 <span class="icon">
                     <i class="fa fa-bus"></i>
                 </span>

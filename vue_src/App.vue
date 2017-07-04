@@ -11,7 +11,7 @@
     <section v-if="pages.home" class="monitor-lockup" >
       <div class="container">
         <div class="column">
-          <small class="refreshed-at"> Refreshed {{ lastRefresh }} </small>
+          <small class="refreshed-at"> Refreshed {{ lastRefresh }} <span class="subtle">({{ formattedNow }})</span></small>
           <bus-monitor v-for="monitor in getSortedArrivals" 
                        :key="monitor.arrival" 
                        :username="monitor.user" 
@@ -78,9 +78,15 @@ export default {
     lastRefresh: function() {
       if (this.now) {
         return this.now.fromNow();
-      } else {
-        return ""
       }
+      return ""
+    },
+
+    formattedNow: function() {
+      if (this.now) {
+        return this.now.format('h:mm:ss a');
+      } 
+      return ""
     }
   },
 
@@ -247,5 +253,10 @@ body {
 
 .refreshed-at {
   color: white;
+}
+
+.subtle {
+  color: darken(white, 20%);
+  opacity: 0.5;
 }
 </style>

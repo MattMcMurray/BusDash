@@ -27,18 +27,15 @@
                     <div class="media-content">
                         <div class="content">
                             <p>
-                                <strong> {{ monitor.stop }}</strong>
+                                <strong> {{ monitor.stop }} — <span>{{ monitor.commonName }}</span></strong>
+                                <a class="is-pulled-right" @click="deleteMonitor(monitor, index)">
+                                    <span class="icon"><i class="fa fa-trash"></i></span>
+                                </a>
                             </p>
                             <p>
-                                <small> {{ getFormattedDate(monitor.createdAt) }}</small>
+                                <small> Added: {{ getFormattedDate(monitor.createdAt) }}</small>
                             </p>
                         </div>
-                            <nav class="level is-mobile">
-                                <div class="level-left">
-                                    <a class="level-item" @click="deleteMonitor(monitor, index)">
-                                        <span class="icon is-small"><i class="fa fa-trash"></i></span>
-                                    </a>
-                            </nav>
                     </div>
                 </article>
             </div>
@@ -62,6 +59,11 @@ export default {
             var _this = this;
             axios.get('/api/monitors/me')
             .then(function(response) {
+
+                response.data.forEach(monitor => {
+                    _this.updateStopInfo(monitor);
+                });
+
                 _this.myMonitors = response.data;
             })
             .catch(function(err) {
@@ -102,13 +104,26 @@ export default {
                 if (result.status === 200) {
                     this.newRoute = null;
                     this.newStop = null;
+                    this.updateStopInfo(result.data);
                     this.myMonitors.push(result.data);
                 }
             })
             .catch(err => {
                 console.log(err);
             });
+        },
+
+        updateStopInfo: function(monitor) {
+            axios.get('/api/stopInfo?stop=' + monitor.stop)
+                .then(result => {
+                    monitor.commonName = result.data.stop.name;
+                    this.$forceUpdate();
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         }
+
     },
 
     computed: {
@@ -121,11 +136,12 @@ export default {
                 return 0;
             }
             return this.myMonitors.sort(compare);
-        }
+        },
     },
     
     mounted() {
         this.getMyMonitors();
+
     }
 }
 </script>

@@ -202,5 +202,21 @@ exports.getStopSchedule = (req, res, next) => {
     .catch(function(reason) {
       res.sendStatus(500);
     });
+  } else {
+    res.sendStatus(400)
+  }
+}
+
+exports.getBusStopInfo = (req, res, next) => {
+  if (req.query.stop) {
+    transit.getStopInfo(req.query.stop)
+      .then(results => {
+        res.json(results.body);
+      })
+      .catch(err => {
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(400);
   }
 }
